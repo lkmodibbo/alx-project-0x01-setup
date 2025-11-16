@@ -1,30 +1,41 @@
-import { UserProps } from "@/interfaces";
+import React, { useState } from "react";
+import Header from "@/components/layout/Header";
 import UserCard from "@/components/common/UserCard";
+import UserModal from "@/components/common/UserModal";
+import { UserData } from "@/interfaces";
 
-interface UsersPageProps {
-  posts: UserProps[];
+interface UsersProps {
+  posts: UserData[];
 }
 
-const Users: React.FC<UsersPageProps> = ({ posts }) => {
-  return (
-    <div className="p-6">
-      <h1 className="text-3xl font-semibold mb-4">Users</h1>
+const Users: React.FC<UsersProps> = ({ posts }) => {
+  const [isOpen, setIsOpen] = useState(false);
 
-      <div className="grid grid-cols-3 gap-4">
-        {posts.map((user: UserProps) => (
-          <UserCard
-            key={user.id}
-            id={user.id}
-            name={user.name}
-            username={user.username}
-            email={user.email}
-            phone={user.phone}
-            website={user.website}
-            address={user.address}
-            company={user.company}
-          />
-        ))}
-      </div>
+  return (
+    <div>
+      <Header />
+
+      <main className="p-4">
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-2xl font-semibold">Users</h1>
+
+          <button
+            onClick={() => setIsOpen(true)}
+            className="bg-blue-700 px-4 py-2 rounded-full text-white"
+          >
+            Add User
+          </button>
+        </div>
+
+        <div className="grid grid-cols-3 gap-3">
+          {posts.map((user) => (
+            <UserCard key={user.id} {...user} />
+          ))}
+        </div>
+      </main>
+
+      {/* Include the Modal */}
+      <UserModal isOpen={isOpen} onClose={() => setIsOpen(false)} user={null} />
     </div>
   );
 };
